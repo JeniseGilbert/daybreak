@@ -1,1 +1,74 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Day Break - Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: url('https://imgur.com/AXQQvYy.jpg') no-repeat center bottom fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 20px;
+      padding: 40px 20px;
+      max-width: 90%;
+    }
+
+    img.logo {
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      color: #ffeb3b;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      background-color: #00e676;
+      color: #000;
+      font-weight: bold;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #00c853;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <img src="https://imgur.com/YPspZxy.png" alt="Day Break Logo" class="logo" />
+    <h1>Skip the Line</h1>
+    <p>Order ahead and pick up your food fast. No wait. No hassle. Just vibes.</p>
+    <button class="btn" onclick="window.location.href='menu.html'">Order Now</button>
+  </div>
+</body>
+</html>
+
