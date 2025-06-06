@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart - Day Break</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding-bottom: 60px;
+      background: #f9f9f9;
+    }
+    header {
+      background: #ffa726;
+      padding: 12px;
+      text-align: center;
+    }
+    header img {
+      height: 90px;
+    }
+    .container {
+      padding: 16px;
+    }
+    .cart-item {
+      background: #fff;
+      padding: 16px;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .cart-item h3 {
+      margin: 0 0 6px;
+    }
+    .cart-item p {
+      margin: 0;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .btn.clear {
+      background: #f44336;
+      color: white;
+    }
+    .btn.checkout {
+      background: #4caf50;
+      color: white;
+    }
+    .empty-msg {
+      text-align: center;
+      color: #999;
+      margin-top: 60px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      font-size: 0.9em;
+    }
+    footer a {
+      flex: 1;
+      text-decoration: none;
+      color: #444;
+      text-align: center;
+    }
+    footer a div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 0;
+      min-width: 44px;
+      min-height: 44px;
+    }
+    footer img {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 4px;
+    }
+
+    @media screen and (max-width: 480px) {
+      .container {
+        padding-bottom: 120px;
+      }
+      header img {
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="https://imgur.com/YPspZxy.png" alt="Day Break Logo" />
+</header>
+
+<div class="container" id="cartContainer">
+  <!-- Cart items will be injected here by JS -->
+  <p class="empty-msg" id="emptyMessage">Your cart is empty.</p>
+</div>
+
+<div class="container actions" id="cartActions" style="display: none;">
+  <button class="btn clear" onclick="clearCart()">Clear Cart</button>
+  <button class="btn checkout">Checkout</button>
+</div>
+
+<footer>
+  <a href="menu.html">
+    <div>
+      <img src="https://img.icons8.com/?size=100&id=G736SmolvT3J&format=png&color=000000" alt="Menu">
+      Menu
+    </div>
+  </a>
+  <a href="cart.html">
+    <div>
+      <img src="https://img.icons8.com/?size=100&id=ii6Lr4KivOiE&format=png&color=000000" alt="Cart">
+      Cart
+    </div>
+  </a>
+  <a href="orders.html">
+    <div>
+      <img src="https://img.icons8.com/?size=100&id=MU6RngCQ3iWG&format=png&color=000000" alt="Orders">
+      Orders
+    </div>
+  </a>
+</footer>
+
+<script>
+// Dummy cart for demo — replace with real cart data later
+let cart = JSON.parse(localStorage.getItem('daybreakCart') || '[]');
+
+function displayCart() {
+  const container = document.getElementById("cartContainer");
+  const emptyMsg = document.getElementById("emptyMessage");
+  const actions = document.getElementById("cartActions");
+
+  container.innerHTML = '';
+  
+  if (cart.length === 0) {
+    emptyMsg.style.display = 'block';
+    actions.style.display = 'none';
+    return;
+  }
+
+  emptyMsg.style.display = 'none';
+  actions.style.display = 'flex';
+
+  cart.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `<h3>${item.name}</h3><p>Qty: ${item.qty}</p>`;
+    container.appendChild(div);
+  });
+}
+
+function clearCart() {
+  cart = [];
+  localStorage.setItem('daybreakCart', JSON.stringify(cart));
+  displayCart();
+}
+
+displayCart();
+</script>
+
+</body>
+</html>
