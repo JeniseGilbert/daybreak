@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>View Order</title>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      padding: 30px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    h1 {
+      color: #ffa726;
+    }
+    .input-box {
+      padding: 12px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    .btn {
+      padding: 10px 20px;
+      background-color: #00D632;
+      color: black;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .order-details {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: none;
+      text-align: left;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .error {
+      color: red;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>View Your Order</h1>
+<p>Enter your confirmation number:</p>
+<input type="text" id="confirmCodeInput" class="input-box" placeholder="e.g. DB-594218" />
+<br>
+<button onclick="fetchOrder()" class="btn">View Order</button>
+
+<div class="error" id="errorMsg"></div>
+
+<div class="order-details" id="orderDetails">
+  <h2>Order Details</h2>
+  <p><strong>Name:</strong> <span id="name"></span></p>
+  <p><strong>Phone:</strong> <span id="phone"></span></p>
+  <p><strong>Payment Method:</strong> <span id="method"></span></p>
+  <p><strong>Transaction ID:</strong> <span id="txnId"></span></p>
+  <p><strong>Amount Paid:</strong> <span id="amount"></span></p>
+  <p><strong>Confirmation #:</strong> <span id="confirmCode"></span></p>
+  <p><strong>Screenshot:</strong> <a id="screenshotLink" href="#" target="_blank">View Image</a></p>
+</div>
+
+<script>
+  const VIEW_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYED_WEBAPP_URL/exec";
+
+  async function fetchOrder() {
+    const code = document.getElementById("confirmCodeInput").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
+    const details = document.getElementById("orderDetails");
+    errorMsg.textContent = "";
+    details.style.display = "none";
+
+    if (!code) {
+      errorMsg.textContent = "Please enter a confirmation number.";
+      return;
+    }
+
+    try {
+      const response = await fetch(`${VIEW_SCRIPT_URL}?code=${encodeURIComponent(code)}`);
+      const data = await response.json();
+
+      if (data.error) {
+        errorMsg.textContent = "Order not found. Please check your confirmation number.";
+      } else {
+        document.getElementById("name").textContent = data.name;
+        document.getElementById("phone").textContent = data.phone;
+        document.getElementById("method").textContent = data.method;
+        document.getElementById("txnId").textContent = data.txnId;
+        document.getElementById("amount").textContent = data.amount;
+        document.getElementById("confirmCode").textContent = data.confirmCode;
+        document.getElementById("screenshotLink").href = data.imageUrl || "#";
+        document.getElementById("screenshotLink").textContent = data.imageUrl ? "View Image" : "Not uploaded";
+        details.style.display = "block";
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      errorMsg.textContent = "An error occurred. Please try again later.";
+    }
+  }
+</script>
+
+</body>
+</html>
