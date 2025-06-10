@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Orders Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Live Orders</h2>
+<table id="ordersTable">
+  <thead>
+    <tr>
+      <th>Timestamp</th>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Method</th>
+      <th>Transaction ID</th>
+      <th>Image</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+function fetchOrders() {
+  fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec")
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.querySelector("#ordersTable tbody");
+      tbody.innerHTML = "";
+      data.reverse().forEach(entry => {
+        const row = `<tr>
+          <td>${entry.timestamp}</td>
+          <td>${entry.name}</td>
+          <td>${entry.phone}</td>
+          <td>${entry.paymentMethod}</td>
+          <td>${entry.transactionId}</td>
+          <td><a href="${entry.imageUrl}" target="_blank">View</a></td>
+        </tr>`;
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+    });
+}
+
+// Fetch on load and every 10 seconds
+fetchOrders();
+setInterval(fetchOrders, 10000);
+</script>
+
+</body>
+</html>
