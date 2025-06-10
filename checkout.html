@@ -344,7 +344,8 @@ document.getElementById("payment-form").addEventListener("submit", async functio
 }
 
 const initials = getInitials(name);
-const confirmation = `${initials}-DB-${Math.floor(100000 + Math.random() * 900000)}`;
+const confirmation = "DB-" + Math.floor(100000 + Math.random() * 900000);
+
 
   const method = document.getElementById("paymentMethod").value;
   const name = method === "cashapp" ? document.getElementById("cashappTag").value : document.getElementById("zelleName").value;
