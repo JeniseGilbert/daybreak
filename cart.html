@@ -34,7 +34,7 @@
       margin: 0 0 6px;
     }
     .cart-item p {
-      margin: 0;
+      margin: 4px 0;
       font-size: 0.9em;
       color: #555;
     }
@@ -115,13 +115,20 @@
 </header>
 
 <div class="container" id="cartContainer">
-  <!-- Cart items will be injected here by JS -->
   <p class="empty-msg" id="emptyMessage">Your cart is empty.</p>
+</div>
+
+<div class="container" id="summarySection" style="display: none; margin-top: 10px;">
+  <div class="cart-item">
+    <p><strong>Subtotal:</strong> $<span id="subtotal">0.00</span></p>
+    <p><strong>Tax (8.25%):</strong> $<span id="tax">0.00</span></p>
+    <p><strong>Total:</strong> $<span id="total">0.00</span></p>
+  </div>
 </div>
 
 <div class="container actions" id="cartActions" style="display: none;">
   <button class="btn clear" onclick="clearCart()">Clear Cart</button>
-  <button class="btn checkout">Checkout</button>
+  <button class="btn checkout" onclick="goToCheckout()">Checkout</button>
 </div>
 
 <footer>
@@ -146,37 +153,71 @@
 </footer>
 
 <script>
-// Dummy cart for demo — replace with real cart data later
 let cart = JSON.parse(localStorage.getItem('daybreakCart') || '[]');
 
 function displayCart() {
   const container = document.getElementById("cartContainer");
   const emptyMsg = document.getElementById("emptyMessage");
   const actions = document.getElementById("cartActions");
+  const summary = document.getElementById("summarySection");
 
   container.innerHTML = '';
-  
+
   if (cart.length === 0) {
     emptyMsg.style.display = 'block';
     actions.style.display = 'none';
+    summary.style.display = 'none';
     return;
   }
 
   emptyMsg.style.display = 'none';
   actions.style.display = 'flex';
+  summary.style.display = 'block';
+
+  let subtotal = 0;
 
   cart.forEach(item => {
+    const itemTotal = (item.price || 0) * item.qty;
+    subtotal += itemTotal;
+
     const div = document.createElement('div');
     div.className = 'cart-item';
-    div.innerHTML = `<h3>${item.name}</h3><p>Qty: ${item.qty}</p>`;
+    div.innerHTML = `
+      <h3>${item.name}</h3>
+      <p>Qty: ${item.qty} × $${item.price.toFixed(2)} = <strong>$${itemTotal.toFixed(2)}</strong></p>
+    `;
     container.appendChild(div);
   });
+
+  const tax = +(subtotal * 0.0825).toFixed(2);
+  const total = +(subtotal + tax).toFixed(2);
+
+  document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+  document.getElementById("tax").textContent = tax.toFixed(2);
+  document.getElementById("total").textContent = total.toFixed(2);
 }
 
 function clearCart() {
   cart = [];
   localStorage.setItem('daybreakCart', JSON.stringify(cart));
+
+  // Reset totals
+  document.getElementById("subtotal").textContent = "0.00";
+  document.getElementById("tax").textContent = "0.00";
+  document.getElementById("total").textContent = "0.00";
+
+  // Hide summary and buttons
+  document.getElementById("summarySection").style.display = "none";
+  document.getElementById("cartActions").style.display = "none";
+
+  // Redisplay cart (which will show "empty" message)
   displayCart();
+}
+
+
+
+function goToCheckout() {
+  window.location.href = 'checkout.html';
 }
 
 displayCart();
