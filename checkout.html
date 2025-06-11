@@ -335,15 +335,9 @@ document.getElementById("payment-form").addEventListener("submit", async functio
   e.preventDefault();
   document.getElementById("loaderOverlay").style.display = "flex";
 
-  function getInitials(fullName) {
-  return fullName
-    .split(" ")
-    .map(word => word[0]?.toUpperCase() || "")
-    .join("")
-    .slice(0, 2); // Max 2 initials
-}
+  
 
-const initials = getInitials(name);
+
 const confirmation = "DB-" + Math.floor(100000 + Math.random() * 900000);
 
 
@@ -397,4 +391,3 @@ renderCartSummary();
 
 </body>
 </html>
-
