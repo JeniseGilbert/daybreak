@@ -3,67 +3,316 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Live Orders Dashboard</title>
+  <title>Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 16px;
+      background: #f9f9f9;
     }
+
+    h1 {
+      color: #ffa726;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
     table {
-      border-collapse: collapse;
       width: 100%;
-      margin-top: 20px;
+      border-collapse: collapse;
+      background: white;
+      font-size: 0.95rem;
+      margin-top: 10px;
     }
+
     th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      vertical-align: middle;
     }
+
     th {
-      background-color: #f2f2f2;
+      background: #ffa726;
+      color: white;
+      text-align: left;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .approve-btn { background: #00D632; color: white; }
+    .reject-btn { background: #000; color: white; }
+
+    img.thumb {
+      max-width: 60px;
+      max-height: 60px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .rejected-row {
+      background-color: #ffe5e5;
+    }
+
+    .approved-row {
+      background-color: #d8ffd4;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #323232;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: none;
+      z-index: 9999;
+      font-size: 0.95rem;
+    }
+
+    #toast button {
+      margin-left: 20px;
+      background: #ffa726;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    #imageModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #imageModal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+    }
+
+    #imageModalClose {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Login */
+    #loginOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,1);
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #loginBox {
+      background: white;
+      padding: 30px 24px;
+      border-radius: 12px;
+      text-align: center;
+      width: 100%;
+      max-width: 320px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #loginBox input {
+      padding: 12px;
+      font-size: 1em;
+      width: 96%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      margin-bottom: 16px;
+    }
+
+    #loginBox button {
+      margin-top: 12px;
+      background: #ffa726;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #loginError {
+      color: red;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
-<h2>Live Orders</h2>
-<table id="ordersTable">
+<!-- Login -->
+<div id="loginOverlay">
+  <div id="loginBox">
+    <h2 style="color:#ffa726;">Admin Login</h2>
+    <input type="password" id="adminPass" placeholder="Enter Password" />
+    <button id="adminLoginBtn" onclick="checkPassword()">Login</button>
+    <p id="loginError"></p>
+  </div>
+</div>
+
+<h1>Admin Panel</h1>
+<table id="orderTable">
   <thead>
     <tr>
-      <th>Timestamp</th>
       <th>Name</th>
       <th>Phone</th>
       <th>Method</th>
-      <th>Transaction ID</th>
-      <th>Image</th>
+      <th>Transaction</th>
+      <th>Total</th>
+      <th>Screenshot</th>
+      <th>Code</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody></tbody>
 </table>
 
-<script>
-function fetchOrders() {
-  fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec")
-    .then(res => res.json())
-    .then(data => {
-      const tbody = document.querySelector("#ordersTable tbody");
-      tbody.innerHTML = "";
-      data.reverse().forEach(entry => {
-        const row = `<tr>
-          <td>${entry.timestamp}</td>
-          <td>${entry.name}</td>
-          <td>${entry.phone}</td>
-          <td>${entry.paymentMethod}</td>
-          <td>${entry.transactionId}</td>
-          <td><a href="${entry.imageUrl}" target="_blank">View</a></td>
-        </tr>`;
-        tbody.insertAdjacentHTML("beforeend", row);
-      });
-    });
-}
+<!-- Toast Notification -->
+<div id="toast">Approved <span id="toastCode"></span><button onclick="undoLastApproval()">Undo</button></div>
 
-// Fetch on load and every 10 seconds
-fetchOrders();
-setInterval(fetchOrders, 10000);
+<!-- Screenshot Modal -->
+<div id="imageModal" onclick="closeModal()">
+  <div id="imageModalClose">&times;</div>
+  <img id="modalImage" src="" alt="Payment Screenshot" />
+</div>
+
+<script>
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyJPvqQmWSnSmBi1vj3d-i57ZrcutqqBYaWMBlz7ybrtWG068vmiY7ssUFEtDzuaM8FaA/exec';
+  const ADMIN_PASSWORD = '14';
+  let lastApprovedCode = "";
+
+  function checkPassword() {
+    const input = document.getElementById("adminPass").value.trim();
+    if (input === ADMIN_PASSWORD) {
+      document.getElementById("loginOverlay").style.display = "none";
+      fetchOrders();
+      setInterval(fetchOrders, 8000);
+    } else {
+      document.getElementById("loginError").textContent = "Incorrect password.";
+    }
+  }
+
+  document.getElementById("adminPass").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") checkPassword();
+  });
+
+  async function fetchOrders() {
+    const res = await fetch(SHEET_URL);
+    const data = await res.json();
+    const tbody = document.querySelector('#orderTable tbody');
+    tbody.innerHTML = '';
+
+    data.forEach(order => {
+      if (!order.confirmCode?.startsWith("DB-")) return;
+
+      const tr = document.createElement("tr");
+
+      if (order.rejected === "Rejected") tr.classList.add("rejected-row");
+      if (order.approved === "Approved") tr.classList.add("approved-row");
+
+      if (order.approved === "Approved") return; // Don't show already approved orders
+
+      tr.innerHTML = `
+        <td>${order.name}</td>
+        <td>${order.phone}</td>
+        <td>${order.method}</td>
+        <td>${order.txnId || ""}</td>
+        <td>${order.amount || "$0.00"}</td>
+        <td>${order.imageUrl 
+          ? `<img src="${order.imageUrl}" class="thumb" onclick="previewImage('${order.imageUrl}')">`
+          : "N/A"}</td>
+        <td>${order.confirmCode}</td>
+        <td>
+          <div class="btn-group">
+            <button class="btn approve-btn" onclick="approveOrder('${order.confirmCode}')">✔</button>
+            <button class="btn reject-btn" onclick="rejectOrder('${order.confirmCode}')">✖</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function approveOrder(code) {
+    lastApprovedCode = code;
+    await fetch(`${SHEET_URL}?approve=${encodeURIComponent(code)}`);
+    showToast(code);
+    fetchOrders();
+  }
+
+  async function rejectOrder(code) {
+    const confirmReject = confirm(`Are you sure you want to reject ${code}?`);
+    if (!confirmReject) return;
+    await fetch(`${SHEET_URL}?reject=${encodeURIComponent(code)}`);
+    fetchOrders();
+  }
+
+  async function undoLastApproval() {
+    if (!lastApprovedCode) return;
+    await fetch(`${SHEET_URL}?undoApprove=${encodeURIComponent(lastApprovedCode)}`);
+    lastApprovedCode = "";
+    fetchOrders();
+    document.getElementById("toast").style.display = "none";
+  }
+
+  function showToast(code) {
+    document.getElementById("toastCode").textContent = code;
+    const toast = document.getElementById("toast");
+    toast.style.display = "flex";
+    setTimeout(() => {
+      if (toast.style.display === "flex") toast.style.display = "none";
+    }, 8000);
+  }
+
+  function previewImage(url) {
+    const modal = document.getElementById("imageModal");
+    const img = document.getElementById("modalImage");
+    img.src = url;
+    modal.style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+  }
 </script>
 
 </body>
