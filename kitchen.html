@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kitchen Display - Day Break</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      background: #f2f2f2;
+      overflow-x: auto;
+    }
+    header {
+      background: #ffa726;
+      padding: 12px;
+      text-align: center;
+    }
+    header img {
+      height: 70px;
+    }
+    h2 {
+      margin-top: 10px;
+      font-size: 1.2em;
+    }
+    .columns {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-around;
+      padding: 20px;
+      overflow-x: auto;
+    }
+    .column {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      margin: 0 10px;
+      flex: 0 0 24%;
+      min-width: 250px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .order {
+      background: #fafafa;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .order:hover {
+      background: #e0f7fa;
+    }
+    .order p {
+      margin: 4px 0;
+      font-size: 0.95em;
+    }
+    .status-new { border-left: 6px solid #FF9800; }
+    .status-progress { border-left: 6px solid #2196F3; }
+    .status-ready { border-left: 6px solid #4CAF50; }
+    .status-complete { border-left: 6px solid #9E9E9E; }
+
+    @media screen and (max-width: 768px) {
+      .columns {
+        flex-wrap: wrap;
+      }
+      .column {
+        flex: 1 1 100%;
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="https://imgur.com/YPspZxy.png" alt="Day Break Logo" />
+</header>
+
+<div class="columns">
+  <div class="column" id="newOrders"><h2>🆕 New</h2></div>
+  <div class="column" id="inProgress"><h2>👨‍🍳 In Progress</h2></div>
+  <div class="column" id="ready"><h2>✅ Ready</h2></div>
+  <div class="column" id="completed"><h2>✔️ Completed</h2></div>
+</div>
+
+<script>
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbyJPvqQmWSnSmBi1vj3d-i57ZrcutqqBYaWMBlz7ybrtWG068vmiY7ssUFEtDzuaM8FaA/exec";
+
+  const orders = { new: [], progress: [], ready: [], complete: [] };
+
+  function renderOrders() {
+    ['newOrders', 'inProgress', 'ready', 'completed'].forEach(id => {
+      document.getElementById(id).innerHTML = `<h2>${document.getElementById(id).querySelector('h2').textContent}</h2>`;
+    });
+
+    orders.new.forEach((order, i) => createOrderCard(order, 'new', i));
+    orders.progress.forEach((order, i) => createOrderCard(order, 'progress', i));
+    orders.ready.forEach((order, i) => createOrderCard(order, 'ready', i));
+    orders.complete.slice(-11).forEach((order, i) => createOrderCard(order, 'complete', i));
+  }
+
+  function createOrderCard(order, status, index) {
+    const card = document.createElement('div');
+    card.className = `order status-${status}`;
+    card.innerHTML = `
+      <p><strong>${order.confirmCode}</strong></p>
+      <p>${order.name}</p>
+      <p style="font-size:0.9em; color:#555;">${order.items}</p>
+    `;
+    card.onclick = () => moveOrder(status, index);
+    document.getElementById(
+      status === 'new' ? 'newOrders' :
+      status === 'progress' ? 'inProgress' :
+      status === 'ready' ? 'ready' : 'completed'
+    ).appendChild(card);
+  }
+
+  function moveOrder(from, index) {
+    const order = orders[from].splice(index, 1)[0];
+    if (from === 'new') orders.progress.push(order);
+    else if (from === 'progress') orders.ready.push(order);
+    else if (from === 'ready') orders.complete.push(order);
+    renderOrders();
+  }
+
+  async function fetchOrders() {
+    try {
+      const res = await fetch(SHEET_URL);
+      const data = await res.json();
+      const mobileOrders = data.filter(row => row.confirmCode?.startsWith("DB-") && row.items && row.amount);
+
+      orders.new = mobileOrders.map(row => ({
+        name: row.name,
+        confirmCode: row.confirmCode,
+        items: row.cart || row.items || "—"
+      }));
+      orders.progress = [];
+      orders.ready = [];
+      orders.complete = [];
+      renderOrders();
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  }
+
+  fetchOrders();
+  setInterval(fetchOrders, 3000);
+</script>
+
+</body>
+</html>
