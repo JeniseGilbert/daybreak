@@ -470,7 +470,7 @@ footer img {
 
 <script>
 let currentItemType = "";
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('daybreakCart') || '[]');
 
 // Open modal for items with customization
 function openItemModal(type) {
@@ -492,8 +492,6 @@ function openItemModal(type) {
   document.getElementById("exclusionField").style.display = (type === 'breakfast' || type === 'combo') ? 'block' : 'none';
 }
 
-
-
 function closeModal() {
   document.getElementById("customModal").style.display = "none";
 }
@@ -502,10 +500,10 @@ function closeModal() {
 function updateQty(change, btn = null) {
   let input;
   if (btn) {
-    // Inline picker (Fruit Cup etc.)
+    // Inline picker
     input = btn.parentElement.querySelector('.qty-input');
   } else {
-    // Modal picker (Combo, Juice)
+    // Modal picker
     input = document.getElementById("qtyInput");
   }
 
@@ -516,20 +514,24 @@ function updateQty(change, btn = null) {
   }
 }
 
+// ✅ Adds items without modal (e.g., BBQ, Fish)
 function addQuickItem(name, btn) {
   const qty = parseInt(btn.previousElementSibling.querySelector('.qty-input').value);
+  const price = (name === 'BBQ Chicken Plate' || name === 'Fish Plate') ? 15 : 0;
 
   const existing = cart.find(item => item.name === name);
   if (existing) {
     existing.qty += qty;
   } else {
-    cart.push({ name, qty });
+    cart.push({ name, qty, price });
   }
 
+  localStorage.setItem('daybreakCart', JSON.stringify(cart)); // ✅ Save
   updateCartSummary();
   showNotification("Item added to cart!");
 }
 
+// ✅ Adds items from modal (e.g., combo, juice, breakfast)
 function submitCustomOrder() {
   const qty = parseInt(document.querySelector('#customModal .qty-input').value);
   const juice = document.getElementById('juice').value;
@@ -546,40 +548,42 @@ function submitCustomOrder() {
   if (juice && currentItemType === 'combo') name += ` w/ ${juice}`;
   if (exclusions.length > 0) name += ` (No: ${exclusions.join(', ')})`;
 
+  let price = 20;
+  if (currentItemType === 'combo') price = 25;
+  if (currentItemType === 'juice') price = 6;
+
   const existing = cart.find(item => item.name === name);
   if (existing) {
     existing.qty += qty;
   } else {
-    cart.push({ name, qty });
+    cart.push({ name, qty, price });
   }
 
+  localStorage.setItem('daybreakCart', JSON.stringify(cart)); // ✅ Save
   closeModal();
   updateCartSummary();
   showNotification("Item added to cart!");
 }
 
+// ✅ Error popup
 function showError(msg = "Something went wrong.") {
   const note = document.getElementById('notification');
   note.textContent = msg;
-  note.style.background = '#f44336'; // red
+  note.style.background = '#f44336';
   note.style.display = 'block';
-
-  setTimeout(() => {
-    note.style.display = 'none';
-  }, 3000);
+  setTimeout(() => note.style.display = 'none', 3000);
 }
 
+// ✅ Success popup
 function showNotification(msg = "Item added to cart!") {
   const note = document.getElementById('notification');
   note.textContent = msg;
-  note.style.background = '#4caf50'; // green
+  note.style.background = '#4caf50';
   note.style.display = 'block';
-
-  setTimeout(() => {
-    note.style.display = 'none';
-  }, 3000);
+  setTimeout(() => note.style.display = 'none', 3000);
 }
 
+// ✅ Mini cart display in menu
 function updateCartSummary() {
   const summary = document.getElementById("cart-summary");
   const cartContent = document.getElementById("cart-content");
@@ -590,26 +594,28 @@ function updateCartSummary() {
   }
 
   summary.style.display = "block";
-cartContent.innerHTML =
-  "<strong>Cart:</strong><br>" +
-  cart.map(i => `${i.name} x${i.qty}`).join("<br>") +
-  '<br><button onclick="clearCart()" style="margin-top:10px; background:#f44336; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">Clear Cart</button>';
-
+  cartContent.innerHTML =
+    "<strong>Cart:</strong><br>" +
+    cart.map(i => `${i.name} x${i.qty}`).join("<br>") +
+    '<br><button onclick="clearCart()" style="margin-top:10px; background:#f44336; color:white; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">Clear Cart</button>';
 }
 
+// ✅ Clear cart from menu
 function clearCart() {
   cart = [];
+  localStorage.setItem('daybreakCart', JSON.stringify(cart));
   updateCartSummary();
   showNotification("Cart cleared.");
 }
 
-
+// ✅ Expand/minimize cart summary
 function toggleCartSummary() {
   const summary = document.getElementById('cart-summary');
   summary.classList.toggle('minimized');
 }
 
-
+// ✅ Run on page load to show mini-cart
+updateCartSummary();
 </script>
 
 </body>
