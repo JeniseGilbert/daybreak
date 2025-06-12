@@ -12,7 +12,7 @@
       padding-bottom: 60px;
       background: #f9f9f9;
     }
-    header {
+     header {
       background: #ffa726;
       padding: 12px;
       text-align: center;
@@ -80,10 +80,28 @@
       color: #444;
       text-align: center;
     }
+    footer a div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 0;
+      min-width: 44px;
+      min-height: 44px;
+    }
     footer img {
       width: 28px;
       height: 28px;
       margin-bottom: 4px;
+    }
+
+    @media screen and (max-width: 480px) {
+      .container {
+        padding-bottom: 120px;
+      }
+      header img {
+        height: 60px;
+      }
     }
     
     #startupModal {
@@ -182,6 +200,7 @@
     }
   </style>
 </head>
+<!-- only body and scripts shown below for brevity, insert this inside your full HTML file -->
 <body>
 
 <header>
@@ -200,15 +219,23 @@
   </div>
 </div>
 
-
 <div class="container">
   <div class="cart-summary" id="orderSummary"></div>
 
+  <!-- ✅ Pickup Info Section -->
+  <div class="form-section">
+    <h3>Pickup Info</h3>
+    <p>Please enter the name of the person who will pick up the food:</p>
+    <input class="input-field" type="text" id="firstName" placeholder="First Name" required>
+    <input class="input-field" type="text" id="lastName" placeholder="Last Name" required>
+  </div>
+
+  <!-- ✅ Payment Info Section -->
   <div class="form-section">
     <h3>Payment Info</h3>
     <p>Please be prepared to copy your payment transaction number and upload a screenshot of your payment.</p>
-    <a class="green-btn" href="https://cash.app/$TriniJen14" target="_blank">Pay via Cash App</a>
-    <a class="purple-btn" href="#" onclick="alert('Send payment to Zelle: 281-730-4040'); return false;">Pay via Zelle</a>
+    <a class="green-btn" href="https://cash.app/$TriniJen14" target="_blank">Click to Pay via Cash App</a>
+    <a class="purple-btn" href="#" onclick="alert('Send payment to Zelle: 281-730-4040'); return false;">Pay via Zelle(Go to your Bank App)</a>
 
     <label for="paymentMethod">Payment Method:</label>
     <select id="paymentMethod" class="input-field" required onchange="toggleDetails(this.value)">
@@ -220,13 +247,14 @@
     <div id="confirm-details" style="display:none;">
       <form id="payment-form">
         <div id="cashappField" style="display:none;">
-          <input class="input-field" type="text" id="cashappTag" placeholder="Cash App Tag" />
+          <input class="input-field" type="text" id="cashappTag" placeholder="Cash App Tag" required>
         </div>
         <div id="zelleField" style="display:none;">
-          <input class="input-field" type="text" id="zelleName" placeholder="Full Name (Zelle)" />
+          <input class="input-field" type="text" id="zelleName" placeholder="Zelle Name or Email" required>
         </div>
+
         <input class="input-field" type="tel" id="phone" placeholder="Phone Number" required>
-        
+
         <label for="transactionId">
           Transaction Number
           <a href="#" onclick="openTxnHelpModal()" style="font-size:0.9em; color:#007bff;">Where do I find this?</a>
@@ -242,59 +270,52 @@
   </div>
 </div>
 
+<!-- Remaining modals and footer... -->
 <!-- Transaction Help Modal -->
-<div id="txnHelpModal">
-  <div class="modal-content">
+<div id="txnHelpModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
+  <div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center;">
     <h3 style="color:#ffa726;">How to Find Your Transaction Number</h3>
-    <ul style="padding-left: 18px; font-size: 0.95em; color: #333;">
-  <li><strong>Cash App:</strong>
-    <ol style="padding-left: 20px; margin-top: 6px;">
-      <li>Open Cash App.</li>
-      <li>Tap the Activity tab (clock icon).</li>
-      <li>Select your payment.</li>
-      <li>Scroll to find the "Transaction Number" and copy it (usually starts with a letter).</li>
-    </ol>
-  </li>
-  <li><strong>Zelle:</strong>
-    <ol style="padding-left: 20px; margin-top: 6px;">
-      <li>Log into your banking app.</li>
-      <li>Go to Zelle transaction history.</li>
-      <li>Select your payment.</li>
-      <li>Copy the confirmation or reference number shown.</li>
-    </ol>
-  </li>
-</ul>
-    <button class="green-btn" onclick="closeTxnHelpModal()" style="width:auto;">Close</button>
+    <ul style="text-align: left; padding-left: 20px; font-size: 0.95em; color: #333;">
+      <li><strong>Cash App:</strong>
+        <ol style="padding-left: 20px; margin-top: 6px;">
+          <li>Open Cash App.</li>
+          <li>Tap the Activity tab (clock icon).</li>
+          <li>Select your payment.</li>
+          <li>Scroll to find the "Transaction Number".</li>
+        </ol>
+      </li>
+      <li><strong>Zelle:</strong>
+        <ol style="padding-left: 20px; margin-top: 6px;">
+          <li>Log into your banking app.</li>
+          <li>View Zelle transactions.</li>
+          <li>Select the one you sent.</li>
+          <li>Look for a reference or confirmation number.</li>
+        </ol>
+      </li>
+    </ul>
+    <button class="green-btn" onclick="closeTxnHelpModal()" style="width:auto; margin-top: 12px;">Close</button>
   </div>
 </div>
-
-<!-- Loader -->
-<div id="loaderOverlay">
-  <div>
-    <div class="spinner"></div>
-    <p style="color:white;">Please wait... we're submitting your order.</p>
-  </div>
-</div>
-
-<!-- Success -->
-<div id="successMessage">
-  <div class="box">
-    <h2 style="color:#00C853;">Order Submitted!</h2>
-    <p>Thank you for your order.<br>
-    Your confirmation number is:<br>
-    <strong id="confirmCode" style="color:#ffa726;"></strong><br>
-    <button onclick="copyConfirmCode()" class="green-btn" style="width:auto; margin:10px auto 0;">Copy Confirmation Number</button><br><br>
-    Please take a screenshot of this message for your records.</p>
-    <a href="index.html" class="green-btn">← Back to Home</a>
-  </div>
-</div>
-
 <footer>
-  <a href="menu.html"><img src="https://img.icons8.com/?size=100&id=G736SmolvT3J&format=png&color=000000" alt="Menu"><br>Menu</a>
-  <a href="cart.html"><img src="https://img.icons8.com/?size=100&id=ii6Lr4KivOiE&format=png&color=000000" alt="Cart"><br>Cart</a>
-  <a href="orders.html"><img src="https://img.icons8.com/?size=100&id=MU6RngCQ3iWG&format=png&color=000000" alt="Orders"><br>Orders</a>
+  <a href="menu.html">
+    <div>
+      <img src="https://img.icons8.com/?size=100&id=G736SmolvT3J&format=png&color=000000" alt="Menu">
+      Menu
+    </div>
+  </a>
+  <a href="cart.html">
+    <div>
+      <img src="https://img.icons8.com/?size=100&id=ii6Lr4KivOiE&format=png&color=000000" alt="Cart">
+      Cart
+    </div>
+  </a>
+  <a href="orders.html">
+    <div>
+      <img src="https://img.icons8.com/?size=100&id=MU6RngCQ3iWG&format=png&color=000000" alt="Orders">
+      Orders
+    </div>
+  </a>
 </footer>
-
 <script>
 const cart = JSON.parse(localStorage.getItem("daybreakCart") || "[]");
 let subtotal = 0;
@@ -335,14 +356,23 @@ document.getElementById("payment-form").addEventListener("submit", async functio
   e.preventDefault();
   document.getElementById("loaderOverlay").style.display = "flex";
 
-  
+  const confirmation = "DB-" + Math.floor(100000 + Math.random() * 900000);
 
-
-const confirmation = "DB-" + Math.floor(100000 + Math.random() * 900000);
-
-
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
   const method = document.getElementById("paymentMethod").value;
-  const name = method === "cashapp" ? document.getElementById("cashappTag").value : document.getElementById("zelleName").value;
+
+  if (!firstName || !lastName) {
+    alert("Please enter both first and last name.");
+    document.getElementById("loaderOverlay").style.display = "none";
+    return;
+  }
+
+  const pickupName = `${firstName} ${lastName}`;
+const paymentName = method === "cashapp"
+  ? document.getElementById("cashappTag").value.trim()
+  : document.getElementById("zelleName").value.trim();
+
   const phone = document.getElementById("phone").value;
   const transactionId = document.getElementById("transactionId").value;
   const file = document.getElementById("screenshot").files[0];
@@ -362,7 +392,8 @@ const confirmation = "DB-" + Math.floor(100000 + Math.random() * 900000);
   } catch {}
 
   const formData = new FormData();
-  formData.append("name", name);
+  formData.append("pickupName", pickupName);
+  formData.append("paymentName", paymentName);
   formData.append("phone", phone);
   formData.append("paymentMethod", method);
   formData.append("transactionId", transactionId);
@@ -385,9 +416,8 @@ function closeStartupModal() {
   document.getElementById("startupModal").style.display = "none";
 }
 
-
 renderCartSummary();
 </script>
-
 </body>
+
 </html>
