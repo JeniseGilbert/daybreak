@@ -193,7 +193,8 @@
 <table id="orderTable">
   <thead>
     <tr>
-      <th>Name</th>
+      <th>Pickup Name</th>
+      <th>Payment Tag/Name</th>
       <th>Phone</th>
       <th>Method</th>
       <th>Transaction</th>
@@ -252,7 +253,8 @@
       if (order.approved === "Approved") return; // Don't show already approved orders
 
       tr.innerHTML = `
-        <td>${order.name}</td>
+        <td>${order.pickupName}</td>
+        <td>${order.paymentName}</td>
         <td>${order.phone}</td>
         <td>${order.method}</td>
         <td>${order.txnId || ""}</td>
