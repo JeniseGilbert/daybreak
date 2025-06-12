@@ -12,17 +12,21 @@
       padding-bottom: 60px;
       background: #f9f9f9;
     }
-     header {
+
+    header {
       background: #ffa726;
       padding: 12px;
       text-align: center;
     }
+
     header img {
       height: 90px;
     }
+
     .container {
       padding: 16px;
     }
+
     .cart-summary, .form-section {
       background: #fff;
       padding: 16px;
@@ -30,6 +34,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       margin-bottom: 16px;
     }
+
     .input-field {
       width: 96%;
       padding: 12px;
@@ -38,6 +43,7 @@
       border: 1px solid #ccc;
       font-size: 1em;
     }
+
     .submit-btn {
       background: #ffa726;
       color: white;
@@ -49,6 +55,7 @@
       font-size: 1.1em;
       cursor: pointer;
     }
+
     .green-btn, .purple-btn {
       padding: 12px;
       border: none;
@@ -61,8 +68,69 @@
       text-decoration: none;
       display: inline-block;
     }
+
     .green-btn { background-color: #00D632; color: black; }
     .purple-btn { background-color: #6534D1; color: white; }
+
+    #startupModal,
+    #txnHelpModal,
+    #loaderOverlay,
+    #successMessage {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    #startupModal { background: rgba(0,0,0,0.7); display: flex; }
+    #txnHelpModal { background: rgba(0,0,0,0.7); }
+    #loaderOverlay {
+      background: rgba(0,0,0,0.7);
+      color: white;
+      flex-direction: column;
+    }
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #ffa726;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #successMessage {
+      background: #f9f9f9;
+      display: none;
+      flex-direction: column;
+    }
+
+    #successMessage .box {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 90%;
+      width: 400px;
+      text-align: center;
+    }
+
     footer {
       position: fixed;
       bottom: 0;
@@ -74,168 +142,56 @@
       padding: 10px 0;
       font-size: 0.9em;
     }
+
     footer a {
       flex: 1;
       text-decoration: none;
       color: #444;
       text-align: center;
     }
-    footer a div {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 0;
-      min-width: 44px;
-      min-height: 44px;
-    }
+
     footer img {
       width: 28px;
       height: 28px;
       margin-bottom: 4px;
     }
-
-    @media screen and (max-width: 480px) {
-      .container {
-        padding-bottom: 120px;
-      }
-      header img {
-        height: 60px;
-      }
-    }
-    
-    #startupModal {
-  display: flex;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 10000;
-  justify-content: center;
-  align-items: center;
-}
-#startupModal .modal-content {
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  max-width: 90%;
-  width: 400px;
-  text-align: center;
-}
-#startupModal h2 { color: #ffa726; margin-top: 0; }
-#startupModal .warning-text .danger { color: red; font-weight: bold; }
-#startupModal button {
-  margin-top: 20px;
-  background: #ffa726;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-    #loaderOverlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-    }
-    .spinner {
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid #ffa726;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    #successMessage {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #f9f9f9;
-      z-index: 9998;
-      justify-content: center;
-      align-items: center;
-    }
-    #successMessage .box {
-      text-align: center;
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      max-width: 90%;
-      width: 400px;
-    }
-    #txnHelpModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-    }
-    #txnHelpModal .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-    }
-    #txnHelpModal ul {
-      text-align: left;
-    }
   </style>
 </head>
-<!-- only body and scripts shown below for brevity, insert this inside your full HTML file -->
 <body>
 
 <header>
   <img src="https://imgur.com/YPspZxy.png" alt="Day Break Logo" />
 </header>
 
-<!-- Startup Modal -->
+<!-- 🚨 Startup Warning Modal -->
 <div id="startupModal">
   <div class="modal-content">
     <h2>Before You Continue</h2>
-    <p class="warning-text">
-      After you send your payment via Cash App or Zelle, you <strong>must return to this page</strong> and complete the form below.<br><br>
-      <span class="danger">Your order will NOT go through</span> if the form isn't submitted.
-    </p>
-    <button onclick="closeStartupModal()">Got it</button>
+    <p>After you send your payment via Cash App or Zelle, <strong>you must return to this page </strong> and complete the form below.<br><br>
+    <span style="color:red; font-weight:bold;">Your order will not go through</span> without submitting this form.</p>
+    <button onclick="document.getElementById('startupModal').style.display='none'" class="submit-btn">Got it</button>
   </div>
 </div>
 
+
+
+
+<!-- 🧾 Cart Summary -->
 <div class="container">
   <div class="cart-summary" id="orderSummary"></div>
 
-  <!-- ✅ Pickup Info Section -->
+  <!-- 👤 Pickup Info -->
   <div class="form-section">
     <h3>Pickup Info</h3>
-    <p>Please enter the name of the person who will pick up the food:</p>
     <input class="input-field" type="text" id="firstName" placeholder="First Name" required>
     <input class="input-field" type="text" id="lastName" placeholder="Last Name" required>
   </div>
 
-  <!-- ✅ Payment Info Section -->
+  <!-- 💳 Payment Info -->
   <div class="form-section">
     <h3>Payment Info</h3>
-    <p>Please be prepared to copy your payment transaction number and upload a screenshot of your payment.</p>
-    <a class="green-btn" href="https://cash.app/$TriniJen14" target="_blank">Click to Pay via Cash App</a>
-    <a class="purple-btn" href="#" onclick="alert('Send payment to Zelle: 281-730-4040'); return false;">Pay via Zelle(Go to your Bank App)</a>
+    <a class="green-btn" href="https://cash.app/$TriniJen14" target="_blank">Pay via Cash App</a>
+    <a class="purple-btn" href="#" onclick="alert('Send Zelle payment to 281-730-4040'); return false;">Pay via Zelle</a>
 
     <label for="paymentMethod">Payment Method:</label>
     <select id="paymentMethod" class="input-field" required onchange="toggleDetails(this.value)">
@@ -257,12 +213,12 @@
 
         <label for="transactionId">
           Transaction Number
-          <a href="#" onclick="openTxnHelpModal()" style="font-size:0.9em; color:#007bff;">Where do I find this?</a>
+          <a href="#" onclick="document.getElementById('txnHelpModal').style.display='flex'" style="color:#007bff;">Where do I find this?</a>
         </label>
         <input class="input-field" type="text" id="transactionId" placeholder="Transaction Number" required>
 
         <label>Upload Payment Screenshot:</label>
-        <input class="input-field file-upload" type="file" id="screenshot" accept="image/*" required>
+        <input class="input-field" type="file" id="screenshot" accept="image/*" required>
 
         <button class="submit-btn" type="submit">Submit Order</button>
       </form>
@@ -270,52 +226,55 @@
   </div>
 </div>
 
-<!-- Remaining modals and footer... -->
-<!-- Transaction Help Modal -->
-<div id="txnHelpModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
-  <div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center;">
-    <h3 style="color:#ffa726;">How to Find Your Transaction Number</h3>
-    <ul style="text-align: left; padding-left: 20px; font-size: 0.95em; color: #333;">
+<!-- 🔍 Transaction Help Modal -->
+<div id="txnHelpModal">
+  <div class="modal-content">
+    <h3>Finding Your Transaction Number</h3>
+    <ul style="text-align:left; font-size:0.9em;">
       <li><strong>Cash App:</strong>
-        <ol style="padding-left: 20px; margin-top: 6px;">
-          <li>Open Cash App.</li>
-          <li>Tap the Activity tab (clock icon).</li>
-          <li>Select your payment.</li>
-          <li>Scroll to find the "Transaction Number".</li>
+        <ol>
+          <li>Open Cash App</li>
+          <li>Tap Activity tab</li>
+          <li>Select your payment</li>
+          <li>Scroll to Transaction Number</li>
         </ol>
       </li>
       <li><strong>Zelle:</strong>
-        <ol style="padding-left: 20px; margin-top: 6px;">
-          <li>Log into your banking app.</li>
-          <li>View Zelle transactions.</li>
-          <li>Select the one you sent.</li>
-          <li>Look for a reference or confirmation number.</li>
+        <ol>
+          <li>Open your banking app</li>
+          <li>Tap on your payment</li>
+          <li>Find confirmation or reference number</li>
         </ol>
       </li>
     </ul>
-    <button class="green-btn" onclick="closeTxnHelpModal()" style="width:auto; margin-top: 12px;">Close</button>
+    <button class="green-btn" onclick="document.getElementById('txnHelpModal').style.display='none'">Close</button>
   </div>
 </div>
+
+<!-- ⏳ Loader Overlay -->
+<div id="loaderOverlay">
+  <div class="spinner"></div>
+  <p>Submitting your order...</p>
+</div>
+
+<!-- ✅ Success Confirmation -->
+<div id="successMessage">
+  <div class="box">
+    <h2 style="color:#00C853;">Order Submitted!</h2>
+    <p>Your confirmation number is:</p>
+    <strong id="confirmCode" style="font-size: 1.4em; color:#ffa726;"></strong><br><br>
+    <button onclick="copyConfirmCode()" class="green-btn">Copy Confirmation Number</button><br><br>
+    <a href="index.html" class="green-btn">← Back to Home</a>
+  </div>
+</div>
+
+<!-- 🔻 Footer -->
 <footer>
-  <a href="menu.html">
-    <div>
-      <img src="https://img.icons8.com/?size=100&id=G736SmolvT3J&format=png&color=000000" alt="Menu">
-      Menu
-    </div>
-  </a>
-  <a href="cart.html">
-    <div>
-      <img src="https://img.icons8.com/?size=100&id=ii6Lr4KivOiE&format=png&color=000000" alt="Cart">
-      Cart
-    </div>
-  </a>
-  <a href="orders.html">
-    <div>
-      <img src="https://img.icons8.com/?size=100&id=MU6RngCQ3iWG&format=png&color=000000" alt="Orders">
-      Orders
-    </div>
-  </a>
+  <a href="menu.html"><img src="https://img.icons8.com/?size=100&id=G736SmolvT3J&format=png&color=000000" alt="Menu"><br>Menu</a>
+  <a href="cart.html"><img src="https://img.icons8.com/?size=100&id=ii6Lr4KivOiE&format=png&color=000000" alt="Cart"><br>Cart</a>
+  <a href="orders.html"><img src="https://img.icons8.com/?size=100&id=MU6RngCQ3iWG&format=png&color=000000" alt="Orders"><br>Orders</a>
 </footer>
+
 <script>
 const cart = JSON.parse(localStorage.getItem("daybreakCart") || "[]");
 let subtotal = 0;
@@ -335,46 +294,53 @@ function renderCartSummary() {
   container.innerHTML += `<p><strong>Total:</strong> $${total.toFixed(2)}</p>`;
 }
 
-function toggleDetails(method) {
+ function toggleDetails(method) {
   document.getElementById("confirm-details").style.display = "block";
-  document.getElementById("cashappField").style.display = method === "cashapp" ? "block" : "none";
-  document.getElementById("zelleField").style.display = method === "zelle" ? "block" : "none";
+
+  const cashappField = document.getElementById("cashappField");
+  const zelleField = document.getElementById("zelleField");
+  const cashappInput = document.getElementById("cashappTag");
+  const zelleInput = document.getElementById("zelleName");
+
+  if (method === "cashapp") {
+    cashappField.style.display = "block";
+    zelleField.style.display = "none";
+    cashappInput.required = true;
+    zelleInput.required = false;
+  } else if (method === "zelle") {
+    zelleField.style.display = "block";
+    cashappField.style.display = "none";
+    zelleInput.required = true;
+    cashappInput.required = false;
+  }
 }
 
-function openTxnHelpModal() {
-  document.getElementById("txnHelpModal").style.display = "flex";
-}
-function closeTxnHelpModal() {
-  document.getElementById("txnHelpModal").style.display = "none";
-}
+
 function copyConfirmCode() {
   const code = document.getElementById("confirmCode").textContent;
-  navigator.clipboard.writeText(code).then(() => alert("Confirmation number copied!"));
+  navigator.clipboard.writeText(code).then(() => alert("Copied!"));
 }
 
 document.getElementById("payment-form").addEventListener("submit", async function(e) {
   e.preventDefault();
   document.getElementById("loaderOverlay").style.display = "flex";
 
-  const confirmation = "DB-" + Math.floor(100000 + Math.random() * 900000);
-
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
-  const method = document.getElementById("paymentMethod").value;
-
-  if (!firstName || !lastName) {
-    alert("Please enter both first and last name.");
+  if (cart.length === 0) {
+    alert("Your cart is empty. Please add items before submitting.");
     document.getElementById("loaderOverlay").style.display = "none";
     return;
   }
 
+  const confirmation = "DB-" + Math.floor(100000 + Math.random() * 900000);
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const method = document.getElementById("paymentMethod").value;
   const pickupName = `${firstName} ${lastName}`;
-const paymentName = method === "cashapp"
-  ? document.getElementById("cashappTag").value.trim()
-  : document.getElementById("zelleName").value.trim();
-
-  const phone = document.getElementById("phone").value;
-  const transactionId = document.getElementById("transactionId").value;
+  const paymentName = method === "cashapp"
+    ? document.getElementById("cashappTag").value.trim()
+    : document.getElementById("zelleName").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const transactionId = document.getElementById("transactionId").value.trim();
   const file = document.getElementById("screenshot").files[0];
 
   const imgData = new FormData();
@@ -412,12 +378,11 @@ const paymentName = method === "cashapp"
   document.getElementById("successMessage").style.display = "flex";
 });
 
-function closeStartupModal() {
-  document.getElementById("startupModal").style.display = "none";
-}
-
-renderCartSummary();
+window.onload = () => {
+  renderCartSummary();
+  document.getElementById("startupModal").style.display = "flex";
+};
 </script>
-</body>
 
+</body>
 </html>
