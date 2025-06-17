@@ -40,9 +40,12 @@
     }
 
     img.logo {
-      max-width: 500px;
-      margin-bottom: 20px;
-    }
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
 
     h1 {
       font-size: 2em;
@@ -70,6 +73,12 @@
     .btn:hover {
       background-color: #00c853;
     }
+    
+    @media screen and (max-width: 480px) {
+    img.logo {
+      height: 170px;
+    }
+  }
   </style>
 </head>
 <body>
