@@ -256,17 +256,20 @@ header img {
   transform: translateX(-50%);
   background: #4caf50;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 16px;
   border-radius: 8px;
   font-weight: bold;
   display: none;
   z-index: 3000;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  max-width: 80%;
+  max-width: 90vw;
+  width: fit-content;
+  box-sizing: border-box;
   text-align: center;
-  line-height: 1.4;
-  white-space: nowrap;
+  white-space: nowrap;           /* ✅ default is no wrap */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 
 
 
@@ -275,6 +278,7 @@ header img {
   #notification {
     max-width: 90%;
     left: 50%;
+    
     transform: translateX(-50%);
   }
 }
@@ -855,9 +859,18 @@ function showNotification(msg = "Item added to cart!") {
   const note = document.getElementById('notification');
   note.textContent = msg;
   note.style.background = '#4caf50';
+
+  // Smart wrapping
+  const shouldWrap = msg.length > 38 || msg.includes('Breakfast') || msg.includes('Combo') || msg.includes('No:');
+  note.style.whiteSpace = shouldWrap ? 'normal' : 'nowrap';
+  note.style.textOverflow = shouldWrap ? 'unset' : 'ellipsis';
+
   note.style.display = 'block';
-  setTimeout(() => note.style.display = 'none', 3000);
+  setTimeout(() => {
+    note.style.display = 'none';
+  }, 3000);
 }
+
 
 // Cart summary
 let hideCartTimeout = null;
