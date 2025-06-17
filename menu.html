@@ -891,7 +891,7 @@ function updateCartSummary(showInstantly = false) {
   ${cart.map(i => `${i.name} x${i.qty}`).join("<br>")}
   <br><strong>Subtotal:</strong> $${subtotal.toFixed(2)}
   <div style="display: flex; gap: 10px; margin-top: 8px;">
-    <a href='cart.html' style="flex: 1; text-align: center; background: #60ba39; color: white; padding: 6px; border-radius: 6px; font-weight: bold; text-decoration: none;">Checkout</a>
+    <a href='cart.html' style="flex: 1; text-align: center; background: #60ba39; color: white; padding: 6px; border-radius: 6px; font-weight: bold; text-decoration: none;">Open Cart</a>
     <button onclick='clearCart()' style="flex: 1; background: #f44336; color: white; border: none; padding: 6px; border-radius: 6px; font-weight: bold;">Clear Cart</button>
   </div>`;
 
