@@ -228,17 +228,29 @@
 }
 
     #notification {
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      background: #4caf50;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-weight: bold;
-      display: none;
-      z-index: 2000;
-    }
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  display: none;
+  z-index: 3000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 480px) {
+  #notification {
+    left: 10px;
+    right: 10px;
+    width: auto;
+    text-align: center;
+  }
+}
+
+
     
     @media screen and (max-width: 480px) {
   .item-card {
@@ -262,6 +274,9 @@
     width: 100%;
     padding: 12px;
   }
+  
+ 
+
 }
 
 @media screen and (max-width: 480px) {
@@ -291,6 +306,64 @@
     font-size: 1em;
   }
 }
+
+.mini-cart-btn {
+  background-color: #00bfa5 !important;
+  color: white !important;
+  border: none;
+  width: 32px;
+  height: 32px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 2px;
+}
+.mini-cart-btn:hover {
+  background-color: #009e8c !important;
+}
+
+.cart-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #f44336;
+  font-size: 0.8em;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cart-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-grow: 1;
+}
+
+.cart-qty {
+  font-weight: bold;
+  font-size: 1em;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-price {
+  font-size: 0.95em;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
 
 
 /*new toast*/
@@ -528,7 +601,7 @@
 
 <div class="container">
   <div class="item-card">
-    <img src="https://source.unsplash.com/60x60/?breakfast" class="item-img" />
+    <img src="https://imgur.com/Y8WAgsS.png" class="item-img" />
     <div class="item-info">
       <h3>Breakfast Plate</h3>
       <p>Boil egg, bake, cucumber salad, saltfish, smoked herring, plantain</p>
@@ -539,7 +612,7 @@
   </div>
   
    <div class="item-card">
-    <img src="https://source.unsplash.com/60x60/?combo" class="item-img" />
+    <img src="https://imgur.com/gKL8gBV.png" class="item-img" />
     <div class="item-info">
       <h3>Breakfast Combo</h3>
       <p>Breakfast Plate + Local Juice </p>
@@ -549,7 +622,7 @@
   </div>
 
   <div class="item-card">
-    <img src="https://source.unsplash.com/60x60/?juice" class="item-img" />
+    <img src="https://imgur.com/u0870Ns.png" class="item-img" />
     <div class="item-info">
       <h3>Local Juice</h3>
        <p>Sorrel, Mauby, Squash</p>
@@ -560,7 +633,7 @@
   </div>
 
  <div class="item-card">
-  <img src="https://source.unsplash.com/60x60/?fruit" class="item-img" />
+  <img src="https://imgur.com/a0YNQ6q.png" class="item-img" />
   <div class="item-info">
     <h3>BBQ Chicken Plate</h3>
     <p>Grilled chicken served with two bakes</p>
@@ -576,7 +649,7 @@
 
   
   <div class="item-card">
-  <img src="https://source.unsplash.com/60x60/?fruit" class="item-img" />
+  <img src="https://imgur.com/4iczo7O.png" class="item-img" />
   <div class="item-info">
     <h3>Fish Plate</h3>
     <p>Fried fish served with two bakes</p>
@@ -640,6 +713,11 @@
   <div id="mini-cart-content"></div>
 </div>
 
+<!-- Floating Cart Summary -->
+<div id="cart-summary">
+  <div class="cart-toggle" onclick="toggleCartSummary()"></div>
+  <div id="cart-content"></div>
+</div>
 
 <div id="notification">Item added to cart!</div>
 
@@ -675,14 +753,8 @@ function openItemModal(type) {
   currentItemType = type;
   document.getElementById("customModal").style.display = "flex";
 
-  // Reset juice dropdown properly
-  const juice = document.getElementById("juice");
-  juice.selectedIndex = 0;
-
-  // Reset quantity
+  document.getElementById("juice").selectedIndex = 0;
   document.getElementById("qtyInput").value = 1;
-
-  // Uncheck all exclusions
   document.querySelectorAll('#exclusionField input[type="checkbox"]').forEach(cb => cb.checked = false);
 
   document.getElementById("modalTitle").innerText = "Customize " + type.charAt(0).toUpperCase() + type.slice(1);
@@ -694,25 +766,18 @@ function closeModal() {
   document.getElementById("customModal").style.display = "none";
 }
 
-// ✅ Handles both modal and inline quantity pickers
+// Quantity pickers (modal and inline)
 function updateQty(change, btn = null) {
-  let input;
-  if (btn) {
-    // Inline picker
-    input = btn.parentElement.querySelector('.qty-input');
-  } else {
-    // Modal picker
-    input = document.getElementById("qtyInput");
-  }
+  let input = btn 
+    ? btn.parentElement.querySelector('.qty-input') 
+    : document.getElementById("qtyInput");
 
   let val = parseInt(input.value);
   val += change;
-  if (val >= 1 && val <= 10) {
-    input.value = val;
-  }
+  if (val >= 1 && val <= 10) input.value = val;
 }
 
-// ✅ Adds items without modal (e.g., BBQ, Fish)
+// Add items quickly (e.g. BBQ, Fish)
 function addQuickItem(name, btn) {
   const qty = parseInt(btn.previousElementSibling.querySelector('.qty-input').value);
   const price = (name === 'BBQ Chicken Plate' || name === 'Fish Plate') ? 15 : 0;
@@ -723,13 +788,16 @@ function addQuickItem(name, btn) {
   } else {
     cart.push({ name, qty, price });
   }
+  btn.previousElementSibling.querySelector('.qty-input').value = 0;
 
-  localStorage.setItem('daybreakCart', JSON.stringify(cart)); // ✅ Save
+
+  localStorage.setItem('daybreakCart', JSON.stringify(cart));
   updateCartSummary();
+  updateMiniCart(); // ⬅️ Force update count and contents
   showNotification("Item added to cart!");
 }
 
-// ✅ Adds items from modal (e.g., combo, juice, breakfast)
+// Add items from modal
 function submitCustomOrder() {
   const qty = parseInt(document.querySelector('#customModal .qty-input').value);
   const juice = document.getElementById('juice').value;
@@ -740,7 +808,7 @@ function submitCustomOrder() {
     return;
   }
 
-  let name = currentItemType === 'combo' ? "Combo Meal" :
+  let name = currentItemType === 'combo' ? "Breakfast Combo" :
              currentItemType === 'juice' ? `Local Juice - ${juice}` : "Breakfast Plate";
 
   if (juice && currentItemType === 'combo') name += ` w/ ${juice}`;
@@ -757,13 +825,14 @@ function submitCustomOrder() {
     cart.push({ name, qty, price });
   }
 
-  localStorage.setItem('daybreakCart', JSON.stringify(cart)); // ✅ Save
+  localStorage.setItem('daybreakCart', JSON.stringify(cart));
   closeModal();
   updateCartSummary();
+  updateMiniCart(); // ⬅️ Ensures counter updates
   showNotification("Item added to cart!");
 }
 
-// ✅ Error popup
+// Notification helpers
 function showError(msg = "Something went wrong.") {
   const note = document.getElementById('notification');
   note.textContent = msg;
@@ -772,7 +841,6 @@ function showError(msg = "Something went wrong.") {
   setTimeout(() => note.style.display = 'none', 3000);
 }
 
-// ✅ Success popup
 function showNotification(msg = "Item added to cart!") {
   const note = document.getElementById('notification');
   note.textContent = msg;
@@ -781,33 +849,32 @@ function showNotification(msg = "Item added to cart!") {
   setTimeout(() => note.style.display = 'none', 3000);
 }
 
-// ✅ Mini cart display in menu
+// Cart summary
 let hideCartTimeout = null;
 
 function updateCartSummary(showInstantly = false) {
   const summary = document.getElementById("cart-summary");
   const cartContent = document.getElementById("cart-content");
 
-  if (cart.length === 0) {
+  if (!cart || cart.length === 0) {
     summary.style.display = "none";
     return;
   }
 
-  let subtotal = 0;
-  cart.forEach(item => {
-    subtotal += item.price * item.qty;
-  });
+  let subtotal = cart.reduce((total, item) => total + item.price * item.qty, 0);
 
-  cartContent.innerHTML =
-    "<strong>Cart:</strong><br>" +
-    cart.map(i => `${i.name} x${i.qty}`).join("<br>") +
-    `<br><strong>Subtotal:</strong> $${subtotal.toFixed(2)}` +
-    `<br><a href='cart.html'>View Cart</a>` +
-    `<br><button onclick='clearCart()'>Clear Cart</button>`;
+ cartContent.innerHTML = `
+  <strong>Cart:</strong><br>
+  ${cart.map(i => `${i.name} x${i.qty}`).join("<br>")}
+  <br><strong>Subtotal:</strong> $${subtotal.toFixed(2)}
+  <div style="display: flex; gap: 10px; margin-top: 8px;">
+    <a href='cart.html' style="flex: 1; text-align: center; background: #60ba39; color: white; padding: 6px; border-radius: 6px; font-weight: bold; text-decoration: none;">Checkout</a>
+    <button onclick='clearCart()' style="flex: 1; background: #f44336; color: white; border: none; padding: 6px; border-radius: 6px; font-weight: bold;">Clear Cart</button>
+  </div>`;
 
-  summary.style.display = "block";
+  
+  
 
-  // Auto-hide logic
   if (!showInstantly) {
     clearTimeout(hideCartTimeout);
     hideCartTimeout = setTimeout(() => {
@@ -816,39 +883,41 @@ function updateCartSummary(showInstantly = false) {
   }
 }
 
-
-
-
-// ✅ Clear cart from menu
 function clearCart() {
   cart = [];
   localStorage.setItem('daybreakCart', JSON.stringify(cart));
   updateCartSummary();
+  updateMiniCart(); // ⬅️ Keeps cart icon accurate
   showNotification("Cart cleared.");
 }
 
-// ✅ Expand/minimize cart summary
-function toggleCartSummary() {
-  const summary = document.getElementById('cart-summary');
-  summary.style.display = (summary.style.display === "block") ? "none" : "block";
-}
-
-function hideCartSummary() {
-  document.getElementById('cart-summary').style.display = 'none';
-}
-
-
-
-//test
+// Toggle cart view
 function toggleMiniCart() {
   const cartBox = document.getElementById('mini-cart');
   cartBox.style.display = cartBox.style.display === 'none' ? 'block' : 'none';
 }
 
-// Update count and content
+
+function formatCartItemName(name) {
+  if (!name.includes("(No:")) return `<strong>${name}</strong>`;
+
+  const base = name.split(" (No:")[0];
+  const exclusions = name.match(/\(No: (.*)\)/)?.[1].split(", ").filter(Boolean);
+
+  return `
+    <strong>${base}</strong><br>
+    <small style="color:#666;">No:</small>
+    <ul style="margin: 4px 0 0 16px; padding: 0; font-size: 0.85em; color: #666; list-style-type: disc;">
+      ${exclusions.map(i => `<li>${i}</li>`).join("")}
+    </ul>
+  `;
+}
+
+// Mini-cart display (with qty & remove)
 function updateMiniCart() {
   const cartContent = document.getElementById('mini-cart-content');
   const cartCount = document.getElementById('mini-cart-count');
+
   if (!cart || cart.length === 0) {
     document.getElementById('mini-cart').style.display = 'none';
     cartCount.textContent = '0';
@@ -857,21 +926,71 @@ function updateMiniCart() {
 
   cartCount.textContent = cart.reduce((sum, i) => sum + i.qty, 0);
 
-  let subtotal = 0;
-  cart.forEach(item => subtotal += item.price * item.qty);
+  let subtotal = cart.reduce((total, item) => total + item.price * item.qty, 0);
 
-  cartContent.innerHTML =
-    cart.map(i => `${i.name} x${i.qty}`).join("<br>") +
-    `<br><strong>Subtotal:</strong> $${subtotal.toFixed(2)}` +
-    `<br><a href='cart.html'>View Cart</a>` +
-    `<br><button onclick='clearCart()'>Clear Cart</button>`;
+  cartContent.innerHTML = cart.map((item, index) => `
+    <div style="margin-bottom: 10px;">
+      ${formatCartItemName(item.name)}
+      <div class="cart-item-row">
+  <button class="remove-btn" onclick="removeItem(${index})">✕</button>
+  <div class="cart-controls">
+    <button class="mini-cart-btn" onclick="changeCartQty(${index}, -1)">−</button>
+    <span class="cart-qty">${item.qty}</span>
+    <button class="mini-cart-btn" onclick="changeCartQty(${index}, 1)">+</button>
+  </div>
+  <span class="cart-price">$${(item.price * item.qty).toFixed(2)}</span>
+</div>
+
+
+      
+    </div>
+  `).join('') + `
+    <hr>
+    <strong>Subtotal:</strong> $${subtotal.toFixed(2)}
+   <div style="display: flex; gap: 10px; margin-top: 8px;">
+  <a href='cart.html' style="flex: 1; text-align: center; background: #60ba39; color: white; padding: 6px; border-radius: 6px; font-weight: bold; text-decoration: none;">Checkout</a>
+  <button onclick='clearCart()' style="flex: 1; font-size: 1em; text-align: center; background: #f44336; color: white; padding: 6px; border-radius: 6px; font-weight: bold; text-decoration: none; cursor: pointer;">Clear Cart</button>
+</div>
+
+
+  `;
 }
-updateMiniCart(); // after adding item or clearing cart
+
+// Quantity change in mini-cart
+function changeCartQty(index, delta) {
+  if (cart[index]) {
+    cart[index].qty += delta;
+    if (cart[index].qty < 1) {
+      cart.splice(index, 1);
+    }
+    localStorage.setItem('daybreakCart', JSON.stringify(cart));
+    updateCartSummary(true);
+    updateMiniCart(); // ⬅️ Reflects cart icon count
+  }
+}
+
+// Remove item from cart
+function removeItem(index) {
+  const item = cart[index];
+  if (!item) return;
+
+  const confirmed = confirm(`Remove "${item.name}" from your cart?`);
+  if (!confirmed) return;
+
+  cart.splice(index, 1);
+  localStorage.setItem('daybreakCart', JSON.stringify(cart));
+  updateCartSummary(true);
+  updateMiniCart();
+  showNotification(`Removed "${item.name}" from cart.`);
+}
 
 
-// ✅ Run on page load to show mini-cart
+// On page load
+updateMiniCart();
 updateCartSummary();
 </script>
+
+
 
 </body>
 </html>
