@@ -71,11 +71,11 @@ header img {
     }
     
     .item-img {
-      width: 60px;
-      height: 60px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
+  width: 50px;
+  height: 50px;
+  margin-bottom: 6px; /* optional */
+}
+
     .add-btn {
       background: #00bfa5;
       color: white;
@@ -269,13 +269,16 @@ header img {
 }
 
 
+
 @media screen and (max-width: 480px) {
+  @media screen and (max-width: 480px) {
   #notification {
-    left: 10px;
-    right: 10px;
-    width: auto;
-    text-align: center;
+    max-width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
   }
+}
+
 }
 
 
@@ -538,13 +541,7 @@ header img {
     padding: 10px;
   }
 
-  #notification {
-    right: 10px;
-    left: 10px;
-    bottom: 70px;
-    font-size: 0.95em;
-    text-align: center;
-  }
+  
 }
 
 @media screen and (max-width: 480px) {
@@ -630,7 +627,7 @@ header img {
 
 <div class="container">
   <div class="item-card">
-    <img src="https://imgur.com/70UDEGB.png" class="item-img" />
+    <img src="https://imgur.com/yyDYaQa.png" class="item-img" loading="lazy" />
     <div class="item-info">
       <h3>Breakfast Plate</h3>
       <p>Boil egg, bake, cucumber salad, saltfish, smoked herring, plantain</p>
@@ -641,7 +638,7 @@ header img {
   </div>
   
    <div class="item-card">
-    <img src="https://imgur.com/rDw0C1Q.png" class="item-img" />
+    <img src="https://imgur.com/TGqGaOK.png" class="item-img" loading="lazy" />
     <div class="item-info">
       <h3>Breakfast Combo</h3>
       <p>Breakfast Plate + Local Juice </p>
@@ -651,7 +648,7 @@ header img {
   </div>
 
   <div class="item-card">
-    <img src="https://imgur.com/u0870Ns.png" class="item-img" />
+    <img src="https://imgur.com/u0870Ns.png" class="item-img" loading="lazy" />
     <div class="item-info">
       <h3>Local Juice</h3>
        <p>Sorrel, Mauby, Squash</p>
@@ -662,7 +659,7 @@ header img {
   </div>
 
  <div class="item-card">
-  <img src="https://imgur.com/a0YNQ6q.png" class="item-img" />
+  <img src="https://imgur.com/a0YNQ6q.png" class="item-img" loading="lazy" />
   <div class="item-info">
     <h3>BBQ Chicken Plate</h3>
     <p>Grilled chicken served with two bakes</p>
@@ -678,7 +675,7 @@ header img {
 
   
  <div class="item-card">
-  <img src="https://imgur.com/4iczo7O.png" class="item-img" />
+  <img src="https://imgur.com/4iczo7O.png" class="item-img" loading="lazy" />
   <div class="item-info">
     <h3>Fish Plate</h3>
     <p>Fried fish served with two bakes</p>
