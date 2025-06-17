@@ -7,145 +7,269 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
   <style>
     body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding-top: 100px; /* space for fixed header */
-    padding-bottom: 120px; /* space for fixed footer + cart/floating elements */
-    background: #f9f9f9;
-  }
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding-top: 130px;
+      padding-bottom: 120px;
+      background: #f9f9f9;
+    }
 
-   header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: #ffa726;
-  padding: 12px 0;
-  display: flex;
-  align-items: center;    /* vertically center image */
-  justify-content: center; /* horizontally center image */
-  z-index: 999;
-}
-
-header img {
-  height: 100px;
-}
-    .container {
-      padding: 16px;
-    }
-    .cart-item {
-      background: #fff;
-      padding: 16px;
-      margin-bottom: 12px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    .cart-item h3 {
-      margin: 0 0 6px;
-    }
-    .cart-item p {
-      margin: 4px 0;
-      font-size: 0.9em;
-      color: #555;
-    }
-    .actions {
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #ffa726;
+      padding: 12px 0;
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
     }
-    .btn {
+
+    header img {
+      height: 100px;
+    }
+
+    .cart-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .cart-left {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .cart-right {
       flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 1em;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      min-width: 280px;
     }
-    .btn.clear {
+
+    .cart-item {
+      display: flex;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .cart-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-right: 16px;
+    }
+
+    .cart-details {
+      flex: 1;
+    }
+
+    .cart-details h3 {
+      margin: 0;
+      font-size: 1.1em;
+    }
+
+    .cart-details p {
+      font-size: 0.85em;
+      margin: 4px 0;
+      color: #666;
+    }
+
+    .price-qty {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-btn {
+      border: 1px solid #ccc;
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 6px;
+      background: #f9f9f9;
+      cursor: pointer;
+    }
+
+    .remove-btn {
       background: #f44336;
       color: white;
+      border: none;
+      padding: 6px 12px;
+      margin-top: 10px;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    .btn.checkout {
-      background: #4caf50;
-      color: white;
+
+    .order-summary h2 {
+      margin: 0 0 16px;
+      font-size: 1.3em;
     }
-    .empty-msg {
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.95em;
+    }
+
+    .summary-line.total {
+      font-weight: bold;
+      font-size: 1.1em;
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: #000;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      font-weight: bold;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .clear-btn {
+  background: #f44336;
+  margin-top: 10px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #323232;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.95em;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+  animation: fadeInOut 3s ease forwards;
+}
+
+.toast button {
+  background: transparent;
+  color: #ffa726;
+  border: none;
+  margin-left: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, 20px); }
+  10% { opacity: 1; transform: translate(-50%, 0); }
+  90% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, 20px); }
+}
+
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      font-size: 0.9em;
+      z-index: 998;
+    }
+
+    footer a {
+      flex: 1;
+      text-decoration: none;
+      color: #444;
       text-align: center;
-      color: #999;
-      margin-top: 60px;
     }
 
-     footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid #ddd;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    font-size: 0.9em;
-    z-index: 998;
-  }
-
-  footer a {
-    flex: 1;
-    text-decoration: none;
-    color: #444;
-    text-align: center;
-  }
-
-  footer a div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 0;
-    min-width: 44px;
-    min-height: 44px;
-  }
-
-  footer img {
-    width: 28px;
-    height: 28px;
-    margin-bottom: 4px;
-  }
-
-  @media screen and (max-width: 480px) {
-    header img {
-      height: 60px;
+    footer a div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 0;
+      min-width: 44px;
+      min-height: 44px;
     }
-  }
 
-    @media screen and (max-width: 480px) {
-      .container {
-        padding-bottom: 120px;
+    footer img {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 4px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .cart-wrapper {
+        flex-direction: column;
+        padding: 20px;
       }
-      
+      header img {
+        height: 60px;
+      }
     }
   </style>
 </head>
 <body>
-
 <header>
-    <img src="https://imgur.com/YPspZxy.png" alt="Day Break Logo" style="height: 110px;" />
+  <img src="https://imgur.com/YPspZxy.png" alt="Day Break Logo" style="height: 110px;" />
 </header>
 
-<div class="container" id="cartContainer">
-  <p class="empty-msg" id="emptyMessage">Your cart is empty.</p>
-</div>
+<div class="cart-wrapper">
+  <div class="cart-left" id="cartContainer">
+    <p class="empty-msg" id="emptyMessage">Your cart is empty.</p>
+  </div>
 
-<div class="container" id="summarySection" style="display: none; margin-top: 10px;">
-  <div class="cart-item">
-    <p><strong>Subtotal:</strong> $<span id="subtotal">0.00</span></p>
-    <p><strong>Tax (8.25%):</strong> $<span id="tax">0.00</span></p>
-    <p><strong>Total:</strong> $<span id="total">0.00</span></p>
+  <div class="cart-right" id="summarySection" style="display:none">
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      <div class="summary-line">
+        <span>Subtotal</span>
+        <span>$<span id="subtotal">0.00</span></span>
+      </div>
+      <div class="summary-line">
+        <span>Tax (8.25%)</span>
+        <span>$<span id="tax">0.00</span></span>
+      </div>
+      <div class="summary-line total">
+        <span>Total</span>
+        <span>$<span id="total">0.00</span></span>
+      </div>
+      <button class="checkout-btn" onclick="goToCheckout()">Checkout</button>
+      <button class="checkout-btn clear-btn" onclick="if(confirm('Are you sure you want to clear the cart?')) clearCart();">Clear Cart</button>
+
+
+    </div>
   </div>
 </div>
 
-<div class="container actions" id="cartActions" style="display: none;">
-  <button class="btn clear" onclick="clearCart()">Clear Cart</button>
-  <button class="btn checkout" onclick="goToCheckout()">Checkout</button>
+<div id="toast" style="display:none;" class="toast">
+  Cart cleared. <button onclick="undoClear()">Undo</button>
 </div>
 
 <footer>
@@ -155,64 +279,136 @@ header img {
 </footer>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('daybreakCart') || '[]');
-console.log('Cart contents from localStorage:', cart);
+let previousCart = [];
+
+function getCart() {
+  return JSON.parse(localStorage.getItem('daybreakCart') || '[]');
+}
+
+function saveCart(cart) {
+  localStorage.setItem('daybreakCart', JSON.stringify(cart));
+}
 
 function displayCart() {
+  const cart = getCart();
   const container = document.getElementById("cartContainer");
   const emptyMsg = document.getElementById("emptyMessage");
-  const actions = document.getElementById("cartActions");
   const summary = document.getElementById("summarySection");
+
+  if (!container || !emptyMsg || !summary) return;
 
   container.innerHTML = '';
 
   if (cart.length === 0) {
     emptyMsg.style.display = 'block';
-    actions.style.display = 'none';
     summary.style.display = 'none';
     return;
   }
 
   emptyMsg.style.display = 'none';
-  actions.style.display = 'flex';
   summary.style.display = 'block';
 
   let subtotal = 0;
 
-  cart.forEach(item => {
-    const price = item.price ?? 0;
-    const itemTotal = price * item.qty;
+  const imageMap = {
+    "Breakfast Plate": "https://imgur.com/yyDYaQa.png",
+    "Breakfast Combo": "https://imgur.com/TGqGaOK.png",
+    "Local Juice": "https://imgur.com/u0870Ns.png",
+    "BBQ Chicken Plate": "https://imgur.com/LXo2N98.png",
+    "Fish Plate": "https://imgur.com/4iczo7O.png"
+  };
+
+  cart.forEach((item, index) => {
+    const itemTotal = item.price * item.qty;
     subtotal += itemTotal;
+
+    const baseName = item.name.split(" (")[0];
+    const itemImg = item.image || imageMap[baseName] || 'https://source.unsplash.com/100x100/?food';
 
     const div = document.createElement('div');
     div.className = 'cart-item';
     div.innerHTML = `
-      <h3>${item.name}</h3>
-      <p>Qty: ${item.qty} × $${price.toFixed(2)} = <strong>$${itemTotal.toFixed(2)}</strong></p>
+      <img src="${itemImg}" alt="item" />
+      <div class="cart-details">
+        <h3>${item.name}</h3>
+        <div class="price-qty">
+          <strong>$<span id="price-${index}">${itemTotal.toFixed(2)}</span></strong>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty(${index}, -1)">−</button>
+            <span id="qty-${index}">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+          </div>
+        </div>
+        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+      </div>
     `;
     container.appendChild(div);
   });
 
+  updateSummaryTotals(subtotal);
+}
+
+function updateSummaryTotals(subtotal) {
   const tax = +(subtotal * 0.0825).toFixed(2);
   const total = +(subtotal + tax).toFixed(2);
-
   document.getElementById("subtotal").textContent = subtotal.toFixed(2);
   document.getElementById("tax").textContent = tax.toFixed(2);
   document.getElementById("total").textContent = total.toFixed(2);
 }
 
+function changeQty(index, delta) {
+  let cart = getCart();
+  if (!cart[index]) return;
+
+  cart[index].qty += delta;
+  if (cart[index].qty <= 0) {
+    removeItem(index);
+    return;
+  }
+
+  saveCart(cart);
+  document.getElementById(`qty-${index}`).textContent = cart[index].qty;
+  document.getElementById(`price-${index}`).textContent = (cart[index].price * cart[index].qty).toFixed(2);
+
+  let subtotal = 0;
+  cart.forEach(item => subtotal += item.price * item.qty);
+  updateSummaryTotals(subtotal);
+}
+
+function removeItem(index) {
+  let cart = getCart();
+  cart.splice(index, 1);
+  saveCart(cart);
+  displayCart(); // ✅ Update immediately
+}
+
 function clearCart() {
-  cart = [];
-  localStorage.setItem('daybreakCart', JSON.stringify(cart));
+  previousCart = getCart();
+  localStorage.removeItem('daybreakCart');
+  displayCart(); // ✅ Update immediately
+  showToast();
+}
 
-  document.getElementById("subtotal").textContent = "0.00";
-  document.getElementById("tax").textContent = "0.00";
-  document.getElementById("total").textContent = "0.00";
+function undoClear() {
+  if (previousCart && previousCart.length > 0) {
+    saveCart(previousCart);
+    displayCart();
+  }
+  hideToast();
+}
 
-  document.getElementById("summarySection").style.display = "none";
-  document.getElementById("cartActions").style.display = "none";
+function showToast() {
+  const toast = document.getElementById("toast");
+  toast.style.display = "block";
+  toast.classList.remove("hidden");
 
-  displayCart();
+  setTimeout(() => {
+    hideToast();
+  }, 3000);
+}
+
+function hideToast() {
+  document.getElementById("toast").style.display = "none";
 }
 
 function goToCheckout() {
@@ -221,6 +417,7 @@ function goToCheckout() {
 
 displayCart();
 </script>
+
 
 </body>
 </html>
