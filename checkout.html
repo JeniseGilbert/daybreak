@@ -188,6 +188,8 @@
   <img src="https://imgur.com/YPspZxy.png" alt="Day Break Logo" />
 </header>
 
+
+
 <!-- Startup Modal -->
 <div id="startupModal">
   <div class="modal-content">
@@ -200,55 +202,88 @@
   </div>
 </div>
 
+<div id="progressBarContainer" style="padding: 12px 16px;">
+  <div style="background: #eee; border-radius: 12px; height: 12px; width: 100%;">
+    <div id="progressBar" style="
+      height: 100%;
+      width: 33.3%;
+      background: #ffa726;
+      border-radius: 12px;
+      transition: width 0.3s ease;
+    "></div>
+  </div>
+  <div style="text-align: center; margin-top: 6px; font-size: 0.9em; font-weight: bold;" id="progressLabel">Step 1 of 3</div>
+</div>
 
 
 <div class="container">
   <div class="cart-summary" id="orderSummary"></div>
   
-  <!-- 👤 Pickup Info -->
-  <div class="form-section">
-    <h3>Pickup Info</h3>
-    <input class="input-field" type="text" id="firstName" placeholder="First Name" required>
-    <input class="input-field" type="text" id="lastName" placeholder="Last Name" required>
-  </div>
+  <!-- STEP 1: Pickup Info -->
+<div class="form-section" id="step1">
+  <h3>Step 1: Pickup Info</h3>
+  <input class="input-field" type="text" id="firstName" placeholder="First Name" required>
+  <input class="input-field" type="text" id="lastName" placeholder="Last Name" required>
+  <button class="submit-btn" onclick="goToStep(2)">Next</button>
+</div>
 
-  <div class="form-section">
-    <h3>Payment Info</h3>
-    <p>Please be prepared to copy your payment transaction number and upload a screenshot of your payment.</p>
-    <a class="green-btn" href="https://cash.app/$TriniJen14" target="_blank">Pay via Cash App</a>
-    <a class="purple-btn" href="#" onclick="alert('Send payment to Zelle: 281-730-4040'); return false;">Pay via Zelle</a>
+<!-- STEP 2: Choose Payment Button -->
+<div class="form-section" id="step2" style="display:none;">
+  <h3>Step 2: Select Payment Option</h3>
+  <p>Please click a payment option below to pay before submitting your form.</p>
+  <a class="green-btn" href="https://cash.app/$TriniJen14" target="_blank">Pay via Cash App</a>
+  <a class="purple-btn" href="#" onclick="alert('Go to your bank app and send payment through Zelle to: Jenise Gilbert 281-730-4040'); return false;">Pay via Zelle</a>
+  <label style="display:block; margin-top: 16px;">
+  <input type="checkbox" id="paymentConfirmCheckbox" required>
+  I have submitted my payment through Zelle or Cash App
+</label>
+  <div style="display: flex; justify-content: space-between; gap: 12px; margin-top: 20px;">
+  
+  <button class="submit-btn" onclick="goToStep(1)" style="flex: 1;">Back</button>
+  <button class="submit-btn" onclick="validateStep2()" style="flex: 1;">Next</button>
+</div>
 
+
+</div>
+
+<!-- STEP 3: Confirmation Form -->
+<div class="form-section" id="step3" style="display:none;">
+  <h3>Step 3: Transaction Confirmation</h3>
+  <form id="payment-form">
     <label for="paymentMethod">Payment Method:</label>
     <select id="paymentMethod" class="input-field" required onchange="toggleDetails(this.value)">
-      <option value="" disabled selected>Select Payment Method</option>
+      <option value="" disabled selected>Select Payment Method That You Used</option>
       <option value="cashapp">Cash App</option>
       <option value="zelle">Zelle</option>
     </select>
 
-    <div id="confirm-details" style="display:none;">
-      <form id="payment-form">
-        <div id="cashappField" style="display:none;">
-          <input class="input-field" type="text" id="cashappTag" placeholder="Cash App Tag" />
-        </div>
-        <div id="zelleField" style="display:none;">
-          <input class="input-field" type="text" id="zelleName" placeholder="Full Name (Zelle)" />
-        </div>
-        <input class="input-field" type="tel" id="phone" placeholder="Phone Number" required>
-        
-        <label for="transactionId">
-          Transaction Number
-          <a href="#" onclick="openTxnHelpModal()" style="font-size:0.9em; color:#007bff;">Where do I find this?</a>
-        </label>
-        <input class="input-field" type="text" id="transactionId" placeholder="Transaction Number" required>
-
-        <label>Upload Payment Screenshot:</label>
-        <input class="input-field file-upload" type="file" id="screenshot" accept="image/*" required>
-
-        <button class="submit-btn" type="submit">Submit Order</button>
-      </form>
+    <div id="cashappField" style="display:none;">
+      <input class="input-field" type="text" id="cashappTag" placeholder="Cash App Tag" />
     </div>
-  </div>
+    <div id="zelleField" style="display:none;">
+      <input class="input-field" type="text" id="zelleName" placeholder="Full Name (Zelle)" />
+    </div>
+
+    <input class="input-field" type="tel" id="phone" placeholder="Phone Number" required>
+
+    <label for="transactionId">
+      Transaction Number
+      <a href="#" onclick="openTxnHelpModal()" style="font-size:0.9em; color:#007bff;">Where do I find this?</a>
+    </label>
+    <input class="input-field" type="text" id="transactionId" placeholder="Transaction Number" required>
+
+    <label>Upload Payment Screenshot:</label>
+    <input class="input-field file-upload" type="file" id="screenshot" accept="image/*" required>
+
+    <div style="display: flex; justify-content: space-between; gap: 12px; margin-top: 20px;">
+  
+  <button class="submit-btn" onclick="goToStep(1)" style="flex: 1;">Back</button>
+  <button class="submit-btn" onclick="validateStep2()" style="flex: 1;">Next</button>
 </div>
+
+  </form>
+</div>
+
 
 <!-- Transaction Help Modal -->
 <div id="txnHelpModal">
@@ -401,6 +436,35 @@ document.getElementById("payment-form").addEventListener("submit", async functio
     console.error(error);
   }
 });
+
+function goToStep(step) {
+  for (let i = 1; i <= 3; i++) {
+    document.getElementById(`step${i}`).style.display = (i === step) ? 'block' : 'none';
+  }
+
+  // Update progress bar
+  const progress = document.getElementById("progressBar");
+  const label = document.getElementById("progressLabel");
+
+  const stepPercent = {
+    1: '33.3%',
+    2: '66.6%',
+    3: '100%'
+  };
+
+  progress.style.width = stepPercent[step];
+  label.textContent = `Step ${step} of 3`;
+}
+
+function validateStep2() {
+  const checkbox = document.getElementById("paymentConfirmCheckbox");
+  if (!checkbox.checked) {
+    alert("Please confirm that you have submitted your payment before continuing.");
+    return;
+  }
+  goToStep(3);
+}
+
 
 function closeStartupModal() {
   document.getElementById("startupModal").style.display = "none";
