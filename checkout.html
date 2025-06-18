@@ -250,19 +250,24 @@
 <div class="form-section" id="step3" style="display:none;">
   <h3>Step 3: Transaction Confirmation</h3>
   <form id="payment-form">
-    <label for="paymentMethod">Payment Method:</label>
-    <select id="paymentMethod" class="input-field" required onchange="toggleDetails(this.value)">
-      <option value="" disabled selected>Select Payment Method That You Used</option>
-      <option value="cashapp">Cash App</option>
-      <option value="zelle">Zelle</option>
-    </select>
+    <!-- Payment Method Dropdown -->
+<label for="paymentMethod">Payment Method:</label>
+<select id="paymentMethod" class="input-field" required onchange="toggleDetails(this.value)">
+  <option value="" disabled selected>Select Payment Method</option>
+  <option value="cashapp">Cash App</option>
+  <option value="zelle">Zelle</option>
+</select>
 
-    <div id="cashappField" style="display:none;">
-      <input class="input-field" type="text" id="cashappTag" placeholder="Cash App Tag" />
-    </div>
-    <div id="zelleField" style="display:none;">
-      <input class="input-field" type="text" id="zelleName" placeholder="Full Name (Zelle)" />
-    </div>
+<!-- Cash App Tag -->
+<div id="cashappField" style="display:none;">
+  <input class="input-field" type="text" id="cashappTag" placeholder="$YourCashTag" />
+</div>
+
+<!-- Zelle Name -->
+<div id="zelleField" style="display:none;">
+  <input class="input-field" type="text" id="zelleName" placeholder="Full Name on Zelle" />
+</div>
+
 
     <input class="input-field" type="tel" id="phone" placeholder="Phone Number" required>
 
@@ -278,7 +283,7 @@
     <div style="display: flex; justify-content: space-between; gap: 12px; margin-top: 20px;">
   
   <button class="submit-btn" onclick="goToStep(1)" style="flex: 1;">Back</button>
-  <button class="submit-btn" onclick="validateStep2()" style="flex: 1;">Submit</button>
+  <button class="submit-btn" onclick="validateStep2()" style="flex: 1;">Next</button>
 </div>
 
   </form>
@@ -359,10 +364,14 @@ function renderCartSummary() {
 }
 
 function toggleDetails(method) {
-  document.getElementById("confirm-details").style.display = "block";
-  document.getElementById("cashappField").style.display = method === "cashapp" ? "block" : "none";
-  document.getElementById("zelleField").style.display = method === "zelle" ? "block" : "none";
+  document.getElementById("cashappField").style.display = (method === "cashapp") ? "block" : "none";
+  document.getElementById("zelleField").style.display = (method === "zelle") ? "block" : "none";
+
+  // Clear unused field to avoid errors
+  document.getElementById("cashappTag").value = method === "cashapp" ? document.getElementById("cashappTag").value : "";
+  document.getElementById("zelleName").value = method === "zelle" ? document.getElementById("zelleName").value : "";
 }
+
 
 function openTxnHelpModal() {
   document.getElementById("txnHelpModal").style.display = "flex";
